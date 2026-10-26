@@ -1,0 +1,25 @@
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.navbar, .card {
+    background-color: #1f1f1f !important;
+    border: 1px solid #333;
+}
+
+.card-title, h1, h2, h3 {
+    color: #00ffcc;
+}
+
+.btn-gamer {
+    background-color: #00ffcc;
+    color: #121212;
+    font-weight: bold;
+}
+
+.btn-gamer:hover {
+    background-color: #00cca3;
+    color: #fff;
+}

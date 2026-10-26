@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Búsqueda de Eventos - GamerCommunity</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <!-- Barra de Navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark px-4">
+        <a class="navbar-brand fw-bold text-info" href="/">🎮 GamerCommunity</a>
+        <div class="ms-auto">
+            <a href="/perfil" class="btn btn-outline-light btn-sm me-2">Mi Perfil</a>
+            <a href="/" class="btn btn-outline-light btn-sm me-2">Volver al Inicio</a>
+            <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-danger btn-sm">Cerrar Sesión</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Contenido de Eventos -->
+    <div class="container my-5">
+        <h2 class="mb-4 text-info">Búsqueda de Eventos Gamers</h2>
+
+        <!-- Filtros de Búsqueda -->
+        <div class="card p-4 mb-4 bg-dark border-secondary">
+            <form class="row g-3">
+                <div class="col-md-4">
+                    <label for="categoria" class="form-label text-light">Categoría</label>
+                    <select id="categoria" class="form-select bg-dark text-white border-secondary">
+                        <option selected>Todas las categorías...</option>
+                        <option>Torneos eSports</option>
+                        <option>LAN Parties</option>
+                        <option>Lanzamientos / Expos</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="fecha" class="form-label text-light">Fecha</label>
+                    <input type="date" class="form-control bg-dark text-white border-secondary" id="fecha">
+                </div>
+                <div class="col-md-4">
+                    <label for="ubicacion" class="form-label text-light">Ubicación</label>
+                    <input type="text" class="form-control bg-dark text-white border-secondary" id="ubicacion" placeholder="Ciudad o comuna...">
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-gamer">Filtrar Eventos</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Listado de Eventos de Ejemplo con Detalles -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card bg-dark border-secondary text-white h-100 p-3">
+                    <div class="card-body">
+                        <h3 class="card-title text-info">Gran Torneo Nacional Valorant</h3>
+                        <p class="card-text text-light"><strong>Descripción:</strong> Competencia presencial con los 8 mejoresक्क् equipos de la región compitiendo por un pozo millonario.</p>
+                        <ul class="list-unstyled text-light">
+                            <li>📅 <strong>Fecha y Hora:</strong> 15 de Noviembre, 14:00 hrs.</li>
+                            <li>📍 <strong>Dirección:</strong> Movistar Arena, Santiago</li>
+                            <li>👥 <strong>Organizadores:</strong> GamerCommunity & Riot Games</li>
+                            <li>🛠️ <strong>Servicios:</strong> Estacionamiento disponible, locomoción colectiva cercana, patio de comidas y alojamiento aliado.</li>
+                            <li>🎤 <strong>Expositores:</strong> Streamers invitados y casters profesionales de la escena.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card bg-dark border-secondary text-white h-100 p-3">
+                    <div class="card-body">
+                        <h3 class="card-title text-info">LAN Party Retro & Actual</h3>
+                        <p class="card-text text-light"><strong>Descripción:</strong> Junta masiva para compartir consolas clásicas, torneos de PC y exhibición de hardware de última generación.</p>
+                        <ul class="list-unstyled text-light">
+                            <li>📅 <strong>Fecha y Hora:</strong> 22 de Noviembre, 10:00 hrs.</li>
+                            <li>📍 <strong>Dirección:</strong> Centro de Convenciones, Providencia</li>
+                            <li>👥 <strong>Organizadores:</strong> Comunidad HardUser</li>
+                            <li>🛠️ <strong>Servicios:</strong> Zona de comidas, seguridad y estacionamiento gratuito.</li>
+                            <li>🎤 <strong>Expositores:</strong> Técnicos expertos en refrigeración líquida y modding.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

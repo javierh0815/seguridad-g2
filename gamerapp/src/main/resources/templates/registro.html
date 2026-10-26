@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - GamerCommunity</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="d-flex align-items-center justify-content-center vh-100">
+
+    <div class="card p-4 shadow" style="width: 400px;">
+        <h2 class="text-center mb-4">Registro Gamer</h2>
+        
+        <form>
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <input type="text" class="form-control bg-dark text-white border-secondary" id="nombre" required>
+            </div>
+            <div class="mb-3">
+                <label for="correo" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control bg-dark text-white border-secondary" id="correo" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Contraseña</label>
+                <input type="password" class="form-control bg-dark text-white border-secondary" id="password" required>
+            </div>
+            <button type="submit" class="btn btn-gamer w-100 mb-2">Registrarse</button>
+        </form>
+        <div class="text-center mt-3">
+            <a href="/" class="text-info text-decoration-none">Volver al inicio</a>
+        </div>
+    </div>
+
+</body>
+</html>
