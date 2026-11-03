@@ -1,0 +1,26 @@
+services:
+  mysql-cdy2203:
+    image: mysql:8.0
+    container_name: mysql-cdy2203
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_cdy2203_data:/var/lib/mysql
+
+  gamer-app:
+    build: .
+    container_name: gamer-app-container
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql-cdy2203
+
+volumes:
+  mysql_cdy2203_data:

@@ -11,23 +11,25 @@
     <div class="card p-4 shadow" style="width: 400px;">
         <h2 class="text-center mb-4">Registro Gamer</h2>
         
-        <form>
+
+        <form th:action="@{/registro}" th:object="${user}" method="post">
             <div class="mb-3">
-                <label for="nombre" class="form-label">Nombre</label>
-                <input type="text" class="form-control bg-dark text-white border-secondary" id="nombre" required>
+                <label for="username" class="form-label">Nombre de usuario</label>
+                <input type="text" th:field="*{username}" class="form-control bg-dark text-white border-secondary" id="username" required>
             </div>
             <div class="mb-3">
-                <label for="correo" class="form-label">Correo Electrónico</label>
-                <input type="email" class="form-control bg-dark text-white border-secondary" id="correo" required>
+                <label for="email" class="form-label">Correo Electrónico</label>
+                <input type="email" th:field="*{email}" class="form-control bg-dark text-white border-secondary" id="email" required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Contraseña</label>
-                <input type="password" class="form-control bg-dark text-white border-secondary" id="password" required>
+                <input type="password" th:field="*{password}" class="form-control bg-dark text-white border-secondary" id="password" required>
             </div>
             <button type="submit" class="btn btn-gamer w-100 mb-2">Registrarse</button>
         </form>
+        
         <div class="text-center mt-3">
-            <a href="/" class="text-info text-decoration-none">Volver al inicio</a>
+            <a th:href="@{/}" class="text-info text-decoration-none">Volver al inicio</a>
         </div>
     </div>
 
