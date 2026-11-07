@@ -2,12 +2,16 @@ package com.gamer.gamerapp.controller;
 
 import com.gamer.gamerapp.config.JwtUtil;
 import com.gamer.gamerapp.service.UserDetailsServiceImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -25,24 +29,47 @@ public class AuthController {
         this.jwtUtil = jwtUtil;
     }
 
-
     @PostMapping("/login")
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthRequest authenticationRequest) throws Exception {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
-            );
-        } catch (BadCredentialsException e) {
-            throw new Exception("Usuario o contraseña incorrectos", e);
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody(required = false) AuthRequest authenticationRequest) {
+        
+
+        if (authenticationRequest == null || 
+            authenticationRequest.getUsername() == null || authenticationRequest.getUsername().trim().isEmpty() ||
+            authenticationRequest.getPassword() == null || authenticationRequest.getPassword().trim().isEmpty()) {
+            
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(Map.of(
+                            "error", "Solicitud malformada",
+                            "message", "El nombre de usuario y la contraseña son requeridos"
+                    ));
         }
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+        try {
+
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authenticationRequest.getUsername().trim(), 
+                            authenticationRequest.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Credenciales inválidas", "message", "Usuario o contraseña incorrectos"));
+        } catch (DisabledException e) {
+            return ResponseEntity
+                    .status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Cuenta deshabilitada", "message", "El usuario se encuentra inactivo"));
+        }
+
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername().trim());
         final String jwt = jwtUtil.generateToken(userDetails);
 
         return ResponseEntity.ok(new AuthResponse(jwt));
     }
 }
-
 
 class AuthRequest {
     private String username;
