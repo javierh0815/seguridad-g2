@@ -41,9 +41,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             try {
                 username = jwtUtil.extractUsername(jwt);
             } catch (Exception e) {
-                logger.error("No se pudo extraer o decodificar el usuario desde el token JWT", e);
+                logger.error("No se pudo extraer el usuario del token JWT", e);
             }
         }
+
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             try {
@@ -53,14 +54,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
+                    
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             } catch (UsernameNotFoundException e) {
-                logger.warn("El usuario extraído del token JWT no existe en el sistema: " + username);
+                logger.warn("Usuario del JWT no encontrado en BD: " + username);
                 SecurityContextHolder.clearContext();
             } catch (Exception e) {
-                logger.error("Error durante la validación del token JWT o carga de usuario", e);
+                logger.error("Error al validar el token JWT", e);
                 SecurityContextHolder.clearContext();
             }
         }

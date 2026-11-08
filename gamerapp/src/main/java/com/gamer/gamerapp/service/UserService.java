@@ -20,13 +20,32 @@ public class UserService {
 
     public void registrarUsuario(User nuevoUsuario) {
 
+        if (nuevoUsuario == null || 
+            nuevoUsuario.getUsername() == null || nuevoUsuario.getUsername().trim().isEmpty() ||
+            nuevoUsuario.getPassword() == null || nuevoUsuario.getPassword().trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre de usuario y la contraseña son obligatorios.");
+        }
+
+        String usernameLimpio = nuevoUsuario.getUsername().trim();
+
+        if (userRepository.existsByUsername(usernameLimpio)) {
+            throw new IllegalArgumentException("El nombre de usuario '" + usernameLimpio + "' ya está registrado.");
+        }
+
+        if (nuevoUsuario.getEmail() != null && !nuevoUsuario.getEmail().trim().isEmpty()) {
+            if (userRepository.existsByEmail(nuevoUsuario.getEmail().trim())) {
+                throw new IllegalArgumentException("El correo electrónico ya se encuentra registrado.");
+            }
+        }
+
+        nuevoUsuario.setUsername(usernameLimpio);
         nuevoUsuario.setPassword(passwordEncoder.encode(nuevoUsuario.getPassword()));
         
+
         if (nuevoUsuario.getRoles() == null || nuevoUsuario.getRoles().isEmpty()) {
             nuevoUsuario.setRoles(Set.of("USER"));
         }
         
-
         userRepository.save(nuevoUsuario);
     }
 }

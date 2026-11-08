@@ -19,6 +19,8 @@ services:
     restart: unless-stopped
     ports:
       - "8080:8080"
+    environment:
+      - JWT_SECRET=oSDEhbmVmyHquVsLqPt/ovtf6mk3VXfBUdxBRFabgIM=
     depends_on:
       - mysql-cdy2203
 

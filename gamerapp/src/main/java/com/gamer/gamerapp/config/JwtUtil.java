@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,17 +22,30 @@ public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
 
-
     @Value("${jwt.expiration:86400000}")
-    private long expirationTime;
+    private long jwtExpiration;
 
-    private Key secretKey;
+    private SecretKey key;
 
     @PostConstruct
     public void init() {
+        if (secret == null || secret.trim().isEmpty()) {
+            throw new IllegalStateException(
+                "CRITICAL ERROR: La propiedad 'jwt.secret' no está configurada o está vacía. " +
+                "Asegúrese de definir la variable de entorno JWT_SECRET."
+            );
+        }
 
-        byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
-        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+        String secretLimpio = secret.trim();
+
+        if (secretLimpio.length() < 32) {
+            throw new IllegalStateException(
+                "CRITICAL ERROR: La clave 'jwt.secret' debe tener al menos 32 caracteres (256 bits) " +
+                "para ser utilizada con el algoritmo HS256. Longitud actual: " + secretLimpio.length()
+            );
+        }
+
+        this.key = Keys.hmacShaKeyFor(secretLimpio.getBytes(StandardCharsets.UTF_8));
     }
 
     public String extractUsername(String token) {
@@ -50,7 +63,7 @@ public class JwtUtil {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
+                .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -66,13 +79,12 @@ public class JwtUtil {
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
-        long now = System.currentTimeMillis();
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
-                .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + expirationTime))
-                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpiration))
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 

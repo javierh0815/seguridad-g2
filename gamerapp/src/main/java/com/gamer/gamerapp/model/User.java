@@ -1,6 +1,7 @@
 package com.gamer.gamerapp.model;
 
 import jakarta.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -20,8 +21,7 @@ public class User {
     private String email;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> roles;
-
+    private Set<String> roles = new HashSet<>();
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
