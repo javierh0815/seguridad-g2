@@ -8,11 +8,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableWebSecurity
 @EnableMethodSecurity 
 public class SecurityConfig {
 
@@ -34,7 +38,6 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated()
             )
-
             .exceptionHandling(exceptions -> exceptions
                 .authenticationEntryPoint((request, response, authException) -> 
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Acceso no autorizado")
@@ -51,7 +54,7 @@ public class SecurityConfig {
     public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/registro", "/css/**", "/js/**", "/images/**").permitAll()
+                .requestMatchers("/", "/login", "/registro", "/buscar", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -70,5 +73,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

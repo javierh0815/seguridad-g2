@@ -11,11 +11,15 @@
     <div class="card p-4 shadow" style="width: 350px;">
         <h2 class="text-center mb-4">Login Gamer</h2>
         
-        <div th:if="${param.error}" class="alert alert-danger text-center p-2">
+
+        <div th:if="${param.error != null or error != null}" class="alert alert-danger text-center p-2">
             Usuario o contraseña incorrectos.
         </div>
-        <div th:if="${param.logout}" class="alert alert-success text-center p-2">
-            Has cerrado sesión exitosamente.
+        <div th:if="${param.logout != null or msg != null}" class="alert alert-success text-center p-2">
+            <span th:text="${msg != null ? msg : 'Has cerrado sesión exitosamente.'}"></span>
+        </div>
+        <div th:if="${param.registrado != null}" class="alert alert-info text-center p-2">
+            ¡Registro exitoso! Ya puedes iniciar sesión.
         </div>
 
         <form th:action="@{/login}" method="post">
@@ -27,10 +31,10 @@
                 <label for="password" class="form-label">Contraseña</label>
                 <input type="password" class="form-control bg-dark text-white border-secondary" id="password" name="password" required>
             </div>
-            <button type="submit" class="btn btn-gamer w-100 mb-2">Entrar</button>
+            <button type="submit" class="btn btn-primary w-100 mb-2">Entrar</button>
         </form>
         <div class="text-center mt-3">
-            <a href="/" class="text-info text-decoration-none">Volver al inicio</a>
+            <a th:href="@{/}" class="text-info text-decoration-none">Volver al inicio</a>
         </div>
     </div>
 

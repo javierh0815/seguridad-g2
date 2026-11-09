@@ -12,12 +12,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+
+    @Column(unique = true, nullable = false, length = 30)
     private String username;
 
-    @Column(nullable = false)
+
+    @Column(nullable = false, length = 100)
     private String password;
 
+
+    @Column(length = 80)
     private String email;
 
     @ElementCollection(fetch = FetchType.EAGER)
