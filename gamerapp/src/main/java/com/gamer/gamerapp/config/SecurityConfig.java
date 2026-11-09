@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,17 @@ public class SecurityConfig {
 
     public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
         this.jwtRequestFilter = jwtRequestFilter;
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().requestMatchers(
+            "/css/**", 
+            "/js/**", 
+            "/images/**", 
+            "/favicon.ico", 
+            "/webjars/**"
+        );
     }
 
 
@@ -50,7 +62,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-
     @Bean
     @Order(2)
     public SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -72,7 +83,8 @@ public class SecurityConfig {
                 .contentTypeOptions(Customizer.withDefaults())
             )
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/login", "/registro", "/buscar", "/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
+                .requestMatchers("/", "/login", "/registro", "/buscar").permitAll()
+                .requestMatchers("/eventos", "/perfil").authenticated()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
