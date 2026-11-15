@@ -39,7 +39,7 @@
                         </div>
                         
                         <div class="mb-3" sec:authorize="isAuthenticated()">
-                            <label class="form-label text-muted">Rol en el sistema:</label>
+                            <span class="form-label text-muted d-block">Rol en el sistema:</span>
                             <span class="badge bg-info text-dark" sec:authentication="principal.authorities">[ROLE_USER]</span>
                         </div>
 
