@@ -73,7 +73,7 @@ public class SecurityConfig {
                         "default-src 'self'; " +
                         "script-src 'self' https://cdn.jsdelivr.net; " +                  
                         "style-src 'self' https://cdn.jsdelivr.net; " + 
-                        "img-src 'self' data: https://images.unsplash.com; " +            
+                        "img-src 'self' data: https:; " +           
                         "font-src 'self'; " +
                         "form-action 'self'; " +
                         "frame-ancestors 'none';"

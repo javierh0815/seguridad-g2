@@ -30,61 +30,158 @@
     </nav>
 
     <div class="container my-5">
-        <h2 class="mb-4 text-info">Detalle Exclusivo de Eventos</h2>
-        <p class="text-light mb-4">Bienvenido a la sección privada. Aquí encontrarás la información detallada, requisitos e inscripción para los torneos oficiales.</p>
+        <h2 class="mb-3 text-info">Detalle Exclusivo de Eventos</h2>
+        <p class="text-light mb-4">Bienvenido a la sección privada. Explora los torneos oficiales, comparte fotos o videos, comenta y valora los eventos publicados.</p>
+
+        <!-- Alertas de retroalimentación -->
+        <div th:if="${mensajeExito}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${mensajeExito}">Operación exitosa</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
+        <div th:if="${mensajeError}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${mensajeError}">Error</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+        </div>
 
         <div class="row">
-
-            <div class="col-md-6 mb-4">
+            <div class="col-md-6 mb-4" th:each="evento : ${eventos}">
                 <div class="card bg-dark border-secondary text-white h-100 shadow">
-                    <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80" class="card-img-top img-evento" alt="Torneo Valorant">
+                    <img th:src="${evento.imagenPortada}" class="card-img-top img-evento" th:alt="${evento.titulo}">
+                    
                     <div class="card-body">
-                        <h3 class="card-title text-info">Gran Torneo Nacional Valorant</h3>
-                        <p class="badge bg-primary mb-2">Presencial</p>
-                        <p class="card-text text-light"><strong>Descripción:</strong> Competencia presencial con los 8 mejores equipos de la región compitiendo por un pozo de $5.000.000 CLP.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge"
+                                  th:classappend="${evento.modalidad == 'Presencial'} ? 'bg-primary' : 'bg-success'"
+                                  th:text="${evento.modalidad}">Modalidad</span>
+                            <span class="text-warning fw-bold">
+                                ★ <span th:text="${#numbers.formatDecimal(evento.promedioValoracion, 1, 1)}">0.0</span> / 5.0
+                                (<span th:text="${#lists.size(evento.comentarios)}">0</span> reseñas)
+                            </span>
+                        </div>
+
+                        <h3 class="card-title text-info" th:text="${evento.titulo}">Título del Evento</h3>
+                        <p class="card-text text-light">
+                            <strong>Descripción:</strong> <span th:text="${evento.descripcion}">Descripción</span>
+                        </p>
                         
                         <hr class="border-secondary">
                         
                         <ul class="list-unstyled text-light lh-lg">
-                            <li>🎮 <strong>Videojuego:</strong> Valorant (Tactical Shooter 5v5)</li>
-                            <li>📅 <strong>Fecha y Hora:</strong> 15 de Noviembre, 14:00 hrs.</li>
-                            <li>📍 <strong>Ubicación:</strong> Movistar Arena, Santiago</li>
-                            <li>👥 <strong>Organizador:</strong> GamerCommunity & Riot Games</li>
-                            <li>📋 <strong>Requisitos de Participación:</strong> Rango mínimo Inmortal, equipo completo de 5 jugadores + 1 suplente, mayor de 16 años.</li>
-                            <li>📝 <strong>Información de Inscripción:</strong> Formulario abierto hasta el 10 de Noviembre. Cuota de inscripción gratuita.</li>
+                            <li>🎮 <strong>Videojuego:</strong> <span th:text="${evento.videojuego}">Juego</span></li>
+                            <li>📅 <strong>Fecha y Hora:</strong> <span th:text="${evento.fechaHora}">Fecha</span></li>
+                            <li>📍 <strong>Ubicación / Enlace:</strong> <span th:text="${evento.ubicacionOEnlace}">Ubicación</span></li>
+                            <li>👥 <strong>Organizador:</strong> <span th:text="${evento.organizador}">Organizador</span></li>
+                            <li>📋 <strong>Requisitos:</strong> <span th:text="${evento.requisitos}">Requisitos</span></li>
+                            <li>📝 <strong>Inscripción:</strong> <span th:text="${evento.inscripcion}">Inscripción</span></li>
                         </ul>
-                    </div>
-                    <div class="card-footer border-secondary text-center">
-                        <button class="btn btn-primary btn-gamer w-100">Inscribir Mi Equipo</button>
-                    </div>
-                </div>
-            </div>
 
-            <div class="col-md-6 mb-4">
-                <div class="card bg-dark border-secondary text-white h-100 shadow">
-                    <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=600&q=80" class="card-img-top img-evento" alt="LAN Party">
-                    <div class="card-body">
-                        <h3 class="card-title text-info">LAN Party & Showmatch Online</h3>
-                        <p class="badge bg-success mb-2">Online</p>
-                        <p class="card-text text-light"><strong>Descripción:</strong> Transmisión masiva de partidas comunitarias, torneos de PC en vivo y exhibición de hardware de última generación.</p>
-                        
+                        <!-- SECCIÓN 1: GALERÍA DE FOTOS Y VIDEOS -->
                         <hr class="border-secondary">
+                        <h5 class="text-info">📸 Fotos y Videos del Evento (<span th:text="${#lists.size(evento.multimedia)}">0</span>)</h5>
                         
-                        <ul class="list-unstyled text-light lh-lg">
-                            <li>🎮 <strong>Videojuego:</strong> League of Legends / CS2</li>
-                            <li>📅 <strong>Fecha y Hora:</strong> 22 de Noviembre, 10:00 hrs.</li>
-                            <li>🌐 <strong>Enlace de Acceso:</strong> https://twitch.tv/gamercommunity_official</li>
-                            <li>👥 <strong>Organizador:</strong> Comunidad HardUser</li>
-                            <li>📋 <strong>Requisitos de Participación:</strong> Cuenta verificada en Discord y registro previo en la plataforma.</li>
-                            <li>📝 <strong>Información de Inscripción:</strong> Cupos limitados a 128 participantes individuales.</li>
-                        </ul>
-                    </div>
-                    <div class="card-footer border-secondary text-center">
-                        <button class="btn btn-primary btn-gamer w-100">Registrarme al Stream</button>
+                        <div th:if="${#lists.isEmpty(evento.multimedia)}" class="text-secondary small mb-3">
+                            Aún no hay fotos ni videos adicionales en este evento.
+                        </div>
+
+                        <div class="row g-2 mb-3" th:unless="${#lists.isEmpty(evento.multimedia)}">
+                            <div class="col-6" th:each="item : ${evento.multimedia}">
+                                <div class="border border-secondary rounded p-2 bg-black">
+                                    <span class="badge bg-info text-dark mb-1" th:text="${item.tipo}">TIPO</span>
+                                    <img th:if="${item.tipo == 'FOTO'}" th:src="${item.url}" class="img-fluid rounded mb-1" alt="Foto evento">
+                                    <div th:if="${item.tipo == 'VIDEO'}" class="small text-break mb-1">
+                                        🎬 <a th:href="${item.url}" target="_blank" rel="noopener noreferrer" class="text-info">Ver Video</a>
+                                    </div>
+                                    <p class="small text-light mb-0" th:text="${item.descripcion}">Descripción</p>
+                                    <small class="text-secondary">Por: <span th:text="${item.usuario.username}">user</span></small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form th:action="@{/eventos/{id}/media(id=${evento.id})}" method="post" class="mb-3 border border-secondary rounded p-2">
+                            <div class="small text-info fw-bold mb-2">Agregar Foto o Video</div>
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    <select name="tipo" class="form-select form-select-sm bg-dark text-white border-secondary" required>
+                                        <option value="FOTO">Foto</option>
+                                        <option value="VIDEO">Video</option>
+                                    </select>
+                                </div>
+                                <div class="col-8">
+                                    <input type="url" name="url" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="https://..." required>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" name="descripcion" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Descripción breve (opcional)">
+                                </div>
+                                <div class="col-4">
+                                    <button type="submit" class="btn btn-outline-info btn-sm w-100">Subir</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- SECCIÓN 2: COMPARTIR EN SITIO WEB Y REDES SOCIALES -->
+                        <hr class="border-secondary">
+                        <h5 class="text-info">🔗 Compartir Evento (<span th:text="${#lists.size(evento.compartidos)}">0</span> compartidos)</h5>
+                        <form th:action="@{/eventos/{id}/compartir(id=${evento.id})}" method="post" class="mb-3 border border-secondary rounded p-2">
+                            <div class="row g-2">
+                                <div class="col-5">
+                                    <select name="plataforma" class="form-select form-select-sm bg-dark text-white border-secondary" required>
+                                        <option value="WEB">Sitio Web (Comunidad)</option>
+                                        <option value="TWITTER">X / Twitter</option>
+                                        <option value="FACEBOOK">Facebook</option>
+                                        <option value="WHATSAPP">WhatsApp</option>
+                                        <option value="DISCORD">Discord</option>
+                                    </select>
+                                </div>
+                                <div class="col-7">
+                                    <input type="text" name="mensaje" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Mensaje al compartir...">
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-outline-success btn-sm w-100">Compartir Ahora</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- SECCIÓN 3: COMENTARIOS Y VALORACIONES -->
+                        <hr class="border-secondary">
+                        <h5 class="text-info">💬 Comentarios y Valoraciones</h5>
+                        
+                        <div th:if="${#lists.isEmpty(evento.comentarios)}" class="text-secondary small mb-2">
+                            Sé el primero en comentar y valorar este evento.
+                        </div>
+
+                        <div class="mb-3" th:unless="${#lists.isEmpty(evento.comentarios)}">
+                            <div class="border-bottom border-secondary py-2" th:each="com : ${evento.comentarios}">
+                                <div class="d-flex justify-content-between">
+                                    <strong class="text-info" th:text="${com.usuario.username}">Usuario</strong>
+                                    <span class="text-warning">★ <span th:text="${com.valoracion}">5</span>/5</span>
+                                </div>
+                                <p class="small text-light mb-0" th:text="${com.contenido}">Comentario</p>
+                            </div>
+                        </div>
+
+                        <form th:action="@{/eventos/{id}/comentarios(id=${evento.id})}" method="post" class="border border-secondary rounded p-2">
+                            <div class="row g-2">
+                                <div class="col-4">
+                                    <select name="valoracion" class="form-select form-select-sm bg-dark text-white border-secondary" required>
+                                        <option value="5">★★★★★ (5)</option>
+                                        <option value="4">★★★★☆ (4)</option>
+                                        <option value="3">★★★☆☆ (3)</option>
+                                        <option value="2">★★☆☆☆ (2)</option>
+                                        <option value="1">★☆☆☆☆ (1)</option>
+                                    </select>
+                                </div>
+                                <div class="col-8">
+                                    <input type="text" name="contenido" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Escribe tu comentario..." required>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary btn-sm w-100">Publicar Comentario y Valoración</button>
+                                </div>
+                            </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
