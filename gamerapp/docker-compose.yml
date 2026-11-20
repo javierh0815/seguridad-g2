@@ -12,24 +12,27 @@ services:
       - "3306:3306"
     volumes:
       - mysql_cdy2203_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
   gamer-app:
-    build:
-      context: .
-      args:
-        KEYSTORE_PASSWORD: ${KEYSTORE_PASSWORD}
+    build: .
     container_name: gamer-app-container
     restart: unless-stopped
     ports:
       - "8443:8443"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-cdy2203:3306/${MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      - SPRING_DATASOURCE_USERNAME=${MYSQL_USER}
-      - SPRING_DATASOURCE_PASSWORD=${MYSQL_PASSWORD}
+      - SPRING_DATASOURCE_URL=${SPRING_DATASOURCE_URL}
+      - SPRING_DATASOURCE_USERNAME=${SPRING_DATASOURCE_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${SPRING_DATASOURCE_PASSWORD}
       - JWT_SECRET=${JWT_SECRET}
       - KEYSTORE_PASSWORD=${KEYSTORE_PASSWORD}
     depends_on:
-      - mysql-cdy2203
+      mysql-cdy2203:
+        condition: service_healthy
 
 volumes:
   mysql_cdy2203_data:
