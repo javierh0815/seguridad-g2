@@ -101,16 +101,19 @@
                             <div class="small text-info fw-bold mb-2">Agregar Foto o Video</div>
                             <div class="row g-2">
                                 <div class="col-4">
-                                    <select name="tipo" class="form-select form-select-sm bg-dark text-white border-secondary" required>
+                                    <label for="media-tipo" th:for="'media-tipo-' + ${evento.id}" class="visually-hidden">Tipo de multimedia</label>
+                                    <select id="media-tipo" th:id="'media-tipo-' + ${evento.id}" name="tipo" class="form-select form-select-sm bg-dark text-white border-secondary" required>
                                         <option value="FOTO">Foto</option>
                                         <option value="VIDEO">Video</option>
                                     </select>
                                 </div>
                                 <div class="col-8">
-                                    <input type="url" name="url" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="https://..." required>
+                                    <label for="media-url" th:for="'media-url-' + ${evento.id}" class="visually-hidden">URL de la foto o video</label>
+                                    <input id="media-url" th:id="'media-url-' + ${evento.id}" type="url" name="url" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="https://..." required>
                                 </div>
                                 <div class="col-8">
-                                    <input type="text" name="descripcion" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Descripción breve (opcional)">
+                                    <label for="media-desc" th:for="'media-desc-' + ${evento.id}" class="visually-hidden">Descripción breve</label>
+                                    <input id="media-desc" th:id="'media-desc-' + ${evento.id}" type="text" name="descripcion" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Descripción breve (opcional)">
                                 </div>
                                 <div class="col-4">
                                     <button type="submit" class="btn btn-outline-info btn-sm w-100">Subir</button>
@@ -124,7 +127,8 @@
                         <form th:action="@{/eventos/{id}/compartir(id=${evento.id})}" method="post" class="mb-3 border border-secondary rounded p-2">
                             <div class="row g-2">
                                 <div class="col-5">
-                                    <select name="plataforma" class="form-select form-select-sm bg-dark text-white border-secondary" required>
+                                    <label for="compartir-plat" th:for="'compartir-plat-' + ${evento.id}" class="visually-hidden">Plataforma</label>
+                                    <select id="compartir-plat" th:id="'compartir-plat-' + ${evento.id}" name="plataforma" class="form-select form-select-sm bg-dark text-white border-secondary" required>
                                         <option value="WEB">Sitio Web (Comunidad)</option>
                                         <option value="TWITTER">X / Twitter</option>
                                         <option value="FACEBOOK">Facebook</option>
@@ -133,7 +137,8 @@
                                     </select>
                                 </div>
                                 <div class="col-7">
-                                    <input type="text" name="mensaje" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Mensaje al compartir...">
+                                    <label for="compartir-msg" th:for="'compartir-msg-' + ${evento.id}" class="visually-hidden">Mensaje al compartir</label>
+                                    <input id="compartir-msg" th:id="'compartir-msg-' + ${evento.id}" type="text" name="mensaje" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Mensaje al compartir...">
                                 </div>
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-outline-success btn-sm w-100">Compartir Ahora</button>
@@ -162,7 +167,8 @@
                         <form th:action="@{/eventos/{id}/comentarios(id=${evento.id})}" method="post" class="border border-secondary rounded p-2">
                             <div class="row g-2">
                                 <div class="col-4">
-                                    <select name="valoracion" class="form-select form-select-sm bg-dark text-white border-secondary" required>
+                                    <label for="com-val" th:for="'com-val-' + ${evento.id}" class="visually-hidden">Valoración</label>
+                                    <select id="com-val" th:id="'com-val-' + ${evento.id}" name="valoracion" class="form-select form-select-sm bg-dark text-white border-secondary" required>
                                         <option value="5">★★★★★ (5)</option>
                                         <option value="4">★★★★☆ (4)</option>
                                         <option value="3">★★★☆☆ (3)</option>
@@ -171,7 +177,8 @@
                                     </select>
                                 </div>
                                 <div class="col-8">
-                                    <input type="text" name="contenido" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Escribe tu comentario..." required>
+                                    <label for="com-cont" th:for="'com-cont-' + ${evento.id}" class="visually-hidden">Comentario</label>
+                                    <input id="com-cont" th:id="'com-cont-' + ${evento.id}" type="text" name="contenido" class="form-control form-control-sm bg-dark text-white border-secondary" placeholder="Escribe tu comentario..." required>
                                 </div>
                                 <div class="col-12">
                                     <button type="submit" class="btn btn-primary btn-sm w-100">Publicar Comentario y Valoración</button>
